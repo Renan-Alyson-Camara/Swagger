@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:alura-forum
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+    defer-datasource:
+      initialization: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+orcamentosApi:
+  jwt:
+    expiration: 1800000
+    secret: jgXB-luMLDIt?|Iudoi4XxHYH:<}]HmijgXB-luMLDIt?|Iudoi4XxHYH:<}]Hmi
