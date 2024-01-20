@@ -1,0 +1,478 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Conta Bancaria API",
+    "description": "A API de Conta Bancária permite interações com uma conta bancária, oferecendo uma variedade de endpoints para consultas e operações financeiras. Esta API foi desenvolvida para ser apresentada na COP da Sicredi. Para saber mais sobre a API, acesse: [API apresentada na COP](https://github.com/Mateusun1/Swagger). Ficou com alguma duvida? Acesse a documentação do Swagger pra saber mais sobre: [Documentação do Swagger](https://swagger.io/docs/)",
+    "termsOfService": "",
+    "contact": {
+      "name": "DB",
+      "url": "https://db.tec.br/",
+      "email": "info@dbserver.com.br"
+    },
+    "license": {
+    },
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/auth": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "summary": "Realizar Login de Usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "email": "email@admin.com",
+                "senha": "1024"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Retorna um Token de acesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "Token de acesso"
+                    },
+                    "tipo": {
+                      "type": "string",
+                      "example": "Bearer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Retorna um erro caso os dados estejam incorretos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados incorretos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/conta": {
+      "post": {
+        "tags": [
+          "Conta"
+        ],
+        "summary": "Criar uma Conta Bancaria",
+        "operationId": "post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "usuario": {
+                  "nome": "João",
+                  "email": "emailexemplo@email.com",
+                  "senha": "123456"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Retorna um cadastro de uma Conta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Conta"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/conta/{id}": {
+      "get": {
+        "tags": [
+          "Conta"
+        ],
+        "summary": "Buscar saldo do Usuário",
+        "description": "Aviso: Apenas Usuários podem visualizar o próprio saldo.",
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna o saldo da Conta",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "saldo": {
+                      "type": "string",
+                      "example": "10"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Conta não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Conta não encontrada"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Conta"
+        ],
+        "summary": "Deletar Conta bancaria",
+        "description": "Aviso: Apenas Administradores podem deletar Contas Bancarias",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retorna uma String dizendo que a conta foi deletada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Conta deletada com Sucesso"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Conta não encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Conta não encontrada"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuario": {
+      "post": {
+        "tags": [
+          "Usuário"
+        ],
+        "summary": "Cadastrar um Usuário",
+        "description": "Aviso: Apenas Administradores podem cadastrar Usuários nessa URL",
+        "operationId": "post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "nome": "João",
+                "email": "emailexemplo@email.com",
+                "senha": "123456"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Retorna uma lista de Usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Usuario"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Retorna um erro caso os dados estejam incorretos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados incorretos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Usuário"
+        ],
+        "summary": "Busca todos os Usuários",
+        "description": "Aviso: Apenas Administradores podem buscar Usuários",
+        "operationId": "get",
+        "responses": {
+          "200": {
+            "description": "Retorna uma lista de Usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Usuario"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Retorna um erro caso os dados estejam incorretos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Usuário não encontrado"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/perfil": {
+      "post": {
+        "tags": [
+          "Perfil"
+        ],
+        "summary": "Cadastrar um Perfil",
+        "description": "Aviso: Apenas Administradores podem cadastrar Perfil nessa URL",
+        "operationId": "post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "nome": "ROLE_FALSO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Retorna um perfil cadastrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "nome": {
+                      "type": "string",
+                      "example": "ROLE_FALSE"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Retorna um erro caso os dados estejam incorretos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dados incorretos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Perfil"
+        ],
+        "summary": "Busca todos os Perfis",
+        "description": "Aviso: Apenas Administradores podem buscar Perfis",
+        "operationId": "get",
+        "responses": {
+          "200": {
+            "description": "Retorna uma lista de Perfis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Perfil"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Retorna um erro caso os dados estejam incorretos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Usuário não encontrado"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "nome": {
+            "type": "string",
+            "example": "João"
+          },
+          "email": {
+            "type": "string",
+            "example": "emailfalso@email.com"
+          },
+          "senha": {
+            "type": "string",
+            "example": "$2a$12$nxpux28OldipXTmLKBIbyeQCW6qLOQPaZDvLIITPeiZwNIFXwfntK"
+          }
+        }
+      },
+      "Conta": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "usuario": {
+            "type": "object",
+            "properties": {
+              "nome": {
+                "type": "string",
+                "example": "João"
+              },
+              "email": {
+                "type": "string",
+                "example": "emailfalso@email.com"
+              },
+              "senha": {
+                "type": "string",
+                "example": "$2a$12$nxpux28OldipXTmLKBIbyeQCW6qLOQPaZDvLIITPeiZwNIFXwfntK"
+              }
+            }
+          },
+          "agencia": {
+            "type": "string",
+            "example": "0001"
+          },
+          "numeroConta": {
+            "type": "string",
+            "example": "12345678-9"
+          },
+          "saldo": {
+            "type": "string",
+            "example": "10"
+          }
+        }
+      },
+      "Perfil": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "nome": {
+            "type": "string",
+            "example": "ROLE_FALSE"
+          }
+        }
+      }
+    }
+  }
+}
